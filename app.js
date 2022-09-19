@@ -67,6 +67,7 @@ $startStopButton.onclick = () => {
       $lapResetButton.innerText = "Lap";
     }
     $startStopButton.innerText = "Stop";
+    startingTimeCurrentLap = milliseconds;
     timerId = setInterval(updateTimeValues, 10);
   } else {
     $startStopButton.innerText = "Start";
