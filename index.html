@@ -1,14 +1,15 @@
 <html>
   <head>
     <title>Stopwatch</title>
+    <link href="styles.css" rel="stylesheet" />
   </head>
   <body>
     <span id="timer">00:00.00</span>
     <br />
-    <button id="lapResetButton">Lap</button>
-    <button id="startStopButton">Start</button>
+    <button id="lapResetButton" class="unabled-lap-button">Lap</button>
+    <button id="startStopButton" class="start-button">Start</button>
 
-    <table id="lapTable"></table>
+    <table id="lapTable" class="lap-entry"></table>
 
     <script src="app.js"></script>
   </body>

@@ -1,0 +1,69 @@
+* {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-weight: 200;
+}
+
+/* ----------------------- */
+
+body {
+  background-color: #030003;
+}
+
+/* ----------------------- */
+
+button {
+  font-size: 50px;
+  height: 200px;
+  width: 200px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 5px #030003;
+  margin: 30px;
+}
+/* ----------------------- */
+
+#timer {
+  color: #fffdff;
+  text-align: center;
+  margin-top: 50%;
+  font-size: 180px;
+}
+
+.lap-entry {
+  color: #fffdff;
+  font-size: 50px;
+}
+
+.best-lap {
+  color: #2abf50;
+}
+
+.worst-lap {
+  color: #e93f35;
+}
+
+/* ----------------------- */
+.start-button {
+  background-color: #082a11;
+  border: solid 5px #082a11;
+  color: #2abf50;
+}
+
+.stop-button {
+  background-color: #320e0b;
+  border: solid 5px #320e0b;
+  color: #e93f35;
+}
+
+/* Used on the Lap button when is not beeing pressed when the Start button has not been pressed yet*/
+.unabled-lap-button {
+  background-color: #1c1c1d;
+  border: solid 5px #1c1c1d;
+  color: #77777e;
+}
+
+/* Used on the Lap and Reset buttons when the Start button has been pressed for the first time*/
+.lap-reset-button {
+  background-color: #333;
+  border: solid 5px #333;
+  color: #fff;
+}

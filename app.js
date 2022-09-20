@@ -61,15 +61,18 @@ function registerNewLap() {
 $startStopButton.onclick = () => {
   if (!isRunning) {
     if (isOnZero) {
+      $lapResetButton.classList.replace("unabled-lap-button", "lap-reset-button");
       isOnZero = false;
       registerNewLap();
     } else {
       $lapResetButton.innerText = "Lap";
     }
+    $startStopButton.classList.replace("start-button", "stop-button");
     $startStopButton.innerText = "Stop";
     startingTimeCurrentLap = milliseconds;
     timerId = setInterval(updateTimeValues, 10);
   } else {
+    $startStopButton.classList.replace("stop-button", "start-button");
     $startStopButton.innerText = "Start";
     $lapResetButton.innerText = "Reset";
     clearInterval(timerId);
@@ -80,6 +83,7 @@ $startStopButton.onclick = () => {
 $lapResetButton.onclick = () => {
   if (!isOnZero) {
     if (!isRunning) {
+      $lapResetButton.classList.replace("lap-reset-button", "unabled-lap-button");
       $startStopButton.innerText = "Start";
       $lapResetButton.innerText = "Lap";
       isOnZero = true;
@@ -89,18 +93,32 @@ $lapResetButton.onclick = () => {
       formatAndPrintTimeValues();
       $lapTable.innerHTML = "";
     } else {
-      if (lapNumber == 1) {
+      if (lapNumber === 1) {
         bestLapPosition = worstLapPosition = 1;
         bestLapMilliseconds = worstLapMilliseconds = lapMilliseconds;
       } else {
         if (lapMilliseconds < bestLapMilliseconds) {
+          if (lapNumber > 2) {
+            document.getElementById(`lap-${bestLapPosition}`).classList.remove("best-lap");
+            document.getElementById(`lap-${lapNumber}`).classList.add("best-lap");
+          }
           bestLapPosition = lapNumber;
           bestLapMilliseconds = lapMilliseconds;
         } else if (lapMilliseconds > worstLapMilliseconds) {
+          if (lapNumber > 2) {
+            document.getElementById(`lap-${worstLapPosition}`).classList.remove("worst-lap");
+            document.getElementById(`lap-${lapNumber}`).classList.add("worst-lap");
+          }
           worstLapPosition = lapNumber;
           worstLapMilliseconds = lapMilliseconds;
         }
       }
+      if (lapNumber === 2) {
+        document.getElementById(`lap-${bestLapPosition}`).classList.add("best-lap");
+        document.getElementById(`lap-${worstLapPosition}`).classList.add("worst-lap");
+      }
+      console.log("BEST LAP POSITION: ", bestLapPosition, " BEST LAP MILLISECONDS: ", bestLapMilliseconds);
+      console.log("WORST LAP POSITION:", worstLapPosition, " WORST LAP MILLISECONDS: ", worstLapMilliseconds);
       ++lapNumber;
       lapMilliseconds = 0;
       registerNewLap();
