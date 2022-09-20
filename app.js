@@ -11,7 +11,7 @@ const $lapTable = document.getElementById("lapTable");
 let lapTableRow, lapTableLapNumberCell, lapTableTimeCell;
 let lapNumber = 1;
 let lapMinutes = (lapSeconds = lapMilliseconds = lapHundredths = 0);
-let currentLap = (startingTimeCurrentLap = bestLapPosition = worstLapPosition = 0);
+let currentLap = (bestLapPosition = worstLapPosition = 0);
 
 // ----------------------- //
 function formatAndPrintTimeValues() {
@@ -67,7 +67,6 @@ $startStopButton.onclick = () => {
       $lapResetButton.innerText = "Lap";
     }
     $startStopButton.innerText = "Stop";
-    startingTimeCurrentLap = milliseconds;
     timerId = setInterval(updateTimeValues, 10);
   } else {
     $startStopButton.innerText = "Start";
@@ -92,7 +91,6 @@ $lapResetButton.onclick = () => {
       ++lapNumber;
       lapMilliseconds = 0;
       registerNewLap();
-      startingTimeCurrentLap = milliseconds;
     }
   }
 };
