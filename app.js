@@ -11,7 +11,7 @@ const $lapTable = document.getElementById("lapTable");
 let lapTableRow, lapTableLapNumberCell, lapTableTimeCell;
 let lapNumber = 1;
 let lapMinutes = (lapSeconds = lapMilliseconds = lapHundredths = 0);
-let currentLap = (bestLapPosition = worstLapPosition = 0);
+let currentLap = (bestLapPosition = worstLapPosition = bestLapMilliseconds = worstLapMilliseconds = 0);
 
 // ----------------------- //
 function formatAndPrintTimeValues() {
@@ -89,6 +89,18 @@ $lapResetButton.onclick = () => {
       formatAndPrintTimeValues();
       $lapTable.innerHTML = "";
     } else {
+      if (lapNumber == 1) {
+        bestLapPosition = worstLapPosition = 1;
+        bestLapMilliseconds = worstLapMilliseconds = lapMilliseconds;
+      } else {
+        if (lapMilliseconds < bestLapMilliseconds) {
+          bestLapPosition = lapNumber;
+          bestLapMilliseconds = lapMilliseconds;
+        } else if (lapMilliseconds > worstLapMilliseconds) {
+          worstLapPosition = lapNumber;
+          worstLapMilliseconds = lapMilliseconds;
+        }
+      }
       ++lapNumber;
       lapMilliseconds = 0;
       registerNewLap();
