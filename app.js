@@ -5,13 +5,13 @@ const $lapResetButton = document.getElementById("lapResetButton");
 let timerId;
 
 let isRunning = false;
-let hasStarted = true;
+let isOnZero = true;
 
 const $lapTable = document.getElementById("lapTable");
-let lapTableRow;
+let lapTableRow, lapTableLapNumberCell, lapTableTimeCell;
 let lapNumber = 1;
 let lapMinutes = (lapSeconds = lapMilliseconds = lapHundredths = 0);
-let currentLap = (startingTimeCurrentLap = 0);
+let currentLap = (startingTimeCurrentLap = bestLapPosition = worstLapPosition = 0);
 
 // ----------------------- //
 function formatAndPrintTimeValues() {
@@ -20,18 +20,14 @@ function formatAndPrintTimeValues() {
   hundredths = hundredths.toString().padStart(2, "0");
   $timer.innerText = `${minutes}:${seconds}.${hundredths}`;
 }
-function formatAndPrintLapValues() {
+function formatLapValues() {
   lapMinutes = lapMinutes.toString().padStart(2, "0");
   lapSeconds = lapSeconds.toString().padStart(2, "0");
   lapHundredths = lapHundredths.toString().padStart(2, "0");
 }
-
-function updateTimeValues() {
-  milliseconds += 10;
-  minutes = Math.floor(milliseconds / 60000);
-  seconds = Math.floor(milliseconds / 1000) % 60;
-  hundredths = Math.floor((milliseconds % 1000) / 10);
-  formatAndPrintTimeValues();
+function updateLapTimer() {
+  currentLap = `${lapMinutes}:${lapSeconds}.${lapHundredths}`;
+  lapTableTimeCell.innerText = `${currentLap}`;
 }
 
 function updateCurrentLapValues() {
@@ -39,21 +35,34 @@ function updateCurrentLapValues() {
   lapMinutes = Math.floor(lapMilliseconds / 60000);
   lapSeconds = Math.floor(lapMilliseconds / 1000) % 60;
   lapHundredths = Math.floor((lapMilliseconds % 1000) / 10);
-  formatAndPrintLapValues();
+  formatLapValues();
+  updateLapTimer();
+}
+function updateTimeValues() {
+  milliseconds += 10;
+  minutes = Math.floor(milliseconds / 60000);
+  seconds = Math.floor(milliseconds / 1000) % 60;
+  hundredths = Math.floor((milliseconds % 1000) / 10);
+  formatAndPrintTimeValues();
+  updateCurrentLapValues();
 }
 
 function registerNewLap() {
-  currentLap = `${lapMinutes}:${lapSeconds}.${lapHundredths}`;
+  formatLapValues();
   lapTableRow = $lapTable.insertRow(0);
-  lapTableRow.innerText = `Lap ${lapNumber} ${currentLap}`;
   lapTableRow.id = `lap-${lapNumber}`;
+  lapTableLapNumberCell = lapTableRow.insertCell(0);
+  lapTableLapNumberCell.innerText = `Lap ${lapNumber}`;
+  lapTableTimeCell = lapTableRow.insertCell(1);
+  updateLapTimer();
 }
 
 // ----------------------- //
 $startStopButton.onclick = () => {
   if (!isRunning) {
-    if (hasStarted) {
-      hasStarted = false;
+    if (isOnZero) {
+      isOnZero = false;
+      registerNewLap();
     } else {
       $lapResetButton.innerText = "Lap";
     }
@@ -69,19 +78,20 @@ $startStopButton.onclick = () => {
 };
 
 $lapResetButton.onclick = () => {
-  if (!hasStarted) {
+  if (!isOnZero) {
     if (!isRunning) {
       $startStopButton.innerText = "Start";
       $lapResetButton.innerText = "Lap";
+      isOnZero = true;
       minutes = seconds = milliseconds = hundredths = 0;
+      lapMinutes = lapSeconds = lapMilliseconds = lapHundredths = 0;
+      lapNumber = 1;
       formatAndPrintTimeValues();
       $lapTable.innerHTML = "";
-      lapNumber = 1;
-    } else if (isRunning) {
-      lapMilliseconds = milliseconds - startingTimeCurrentLap;
-      updateCurrentLapValues();
-      registerNewLap();
+    } else {
       ++lapNumber;
+      lapMilliseconds = 0;
+      registerNewLap();
       startingTimeCurrentLap = milliseconds;
     }
   }
