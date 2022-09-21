@@ -117,8 +117,8 @@ $lapResetButton.onclick = () => {
         document.getElementById(`lap-${bestLapPosition}`).classList.add("best-lap");
         document.getElementById(`lap-${worstLapPosition}`).classList.add("worst-lap");
       }
-      console.log("BEST LAP POSITION: ", bestLapPosition, " BEST LAP MILLISECONDS: ", bestLapMilliseconds);
-      console.log("WORST LAP POSITION:", worstLapPosition, " WORST LAP MILLISECONDS: ", worstLapMilliseconds);
+      // console.log("BEST LAP POSITION: ", bestLapPosition, " BEST LAP MILLISECONDS: ", bestLapMilliseconds);
+      // console.log("WORST LAP POSITION:", worstLapPosition, " WORST LAP MILLISECONDS: ", worstLapMilliseconds);
       ++lapNumber;
       lapMilliseconds = 0;
       registerNewLap();

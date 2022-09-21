@@ -4,12 +4,17 @@
     <link href="styles.css" rel="stylesheet" />
   </head>
   <body>
-    <span id="timer">00:00.00</span>
-    <br />
-    <button id="lapResetButton" class="unabled-lap-button">Lap</button>
-    <button id="startStopButton" class="start-button">Start</button>
+    <div id="timerAndButtonsContainer">
+      <span id="timer">00:00.00</span>
+      <div id="buttonsContainer">
+        <button id="lapResetButton" class="unabled-lap-button">Lap</button>
+        <button id="startStopButton" class="start-button">Start</button>
+      </div>
+    </div>
 
-    <table id="lapTable" class="lap-entry"></table>
+    <div id="lapContainer">
+      <table id="lapTable" class="lap-entry"></table>
+    </div>
 
     <script src="app.js"></script>
   </body>
