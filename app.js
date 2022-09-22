@@ -49,12 +49,27 @@ function updateTimeValues() {
 
 function registerNewLap() {
   formatLapValues();
+  if (lapNumber <= 6) deleteEmptyRow();
   lapTableRow = $lapTable.insertRow(0);
   lapTableRow.id = `lap-${lapNumber}`;
   lapTableLapNumberCell = lapTableRow.insertCell(0);
   lapTableLapNumberCell.innerText = `Lap ${lapNumber}`;
   lapTableTimeCell = lapTableRow.insertCell(1);
   updateLapTimer();
+}
+
+function deleteEmptyRow() {
+  document.getElementById(`emptyRow${lapNumber}`).remove();
+}
+
+function createEmptyRows() {
+  lapNumber = 6;
+  while (lapNumber > 0) {
+    lapTableRow = $lapTable.insertRow(0);
+    lapTableRow.id = `emptyRow${lapNumber}`;
+    lapTableRow.insertCell(0);
+    --lapNumber;
+  }
 }
 
 // ----------------------- //
@@ -89,9 +104,10 @@ $lapResetButton.onclick = () => {
       isOnZero = true;
       minutes = seconds = milliseconds = hundredths = 0;
       lapMinutes = lapSeconds = lapMilliseconds = lapHundredths = 0;
-      lapNumber = 1;
       formatAndPrintTimeValues();
       $lapTable.innerHTML = "";
+      createEmptyRows();
+      lapNumber = 1;
     } else {
       if (lapNumber === 1) {
         bestLapPosition = worstLapPosition = 1;
@@ -117,8 +133,6 @@ $lapResetButton.onclick = () => {
         document.getElementById(`lap-${bestLapPosition}`).classList.add("best-lap");
         document.getElementById(`lap-${worstLapPosition}`).classList.add("worst-lap");
       }
-      // console.log("BEST LAP POSITION: ", bestLapPosition, " BEST LAP MILLISECONDS: ", bestLapMilliseconds);
-      // console.log("WORST LAP POSITION:", worstLapPosition, " WORST LAP MILLISECONDS: ", worstLapMilliseconds);
       ++lapNumber;
       lapMilliseconds = 0;
       registerNewLap();

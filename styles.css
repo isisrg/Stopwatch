@@ -25,11 +25,13 @@ button {
 table {
   width: 100%;
   border-collapse: collapse;
+  empty-cells: show;
 }
 
 tr {
-  line-height: 100px;
+  height: 110px;
   border-top: solid 3px #151516;
+  border-bottom: solid 3px #151516;
   justify-items: center;
 }
 
@@ -41,7 +43,7 @@ td:nth-child(2) {
 
 #timerAndButtonsContainer {
   width: 95%;
-  height: 50%;
+  height: 55%;
   margin: 0 auto;
   display: flex;
   justify-content: center;
@@ -57,9 +59,16 @@ td:nth-child(2) {
 }
 
 #lapContainer {
+  overflow-x: auto;
+  height: 35%;
   width: 95%;
   margin: 0 auto;
   border-top: solid 3px #151516;
+}
+
+#bottomMenu {
+  height: 10%;
+  background-color: #131313;
 }
 
 /* ----------------------- */
@@ -67,7 +76,7 @@ td:nth-child(2) {
 #timer {
   color: #fffdff;
   font-weight: 100;
-  font-size: 180px;
+  font-size: 200px;
   align-self: center;
   position: relative;
 }
@@ -117,19 +126,20 @@ td:nth-child(2) {
   color: #77777e;
 }
 
+/* hover or active */
 .unabled-lap-button:hover {
   background-color: #0f0f0f;
   border: solid 5px #0f0f0f;
   color: #77777e;
 }
 
-/* Used on the Lap and Reset buttons when the Start button has been pressed for the first time*/
 .lap-reset-button {
   background-color: #333;
   border: solid 5px #333;
   color: #fff;
 }
 
+/* hover or active */
 .lap-reset-button:hover {
   background-color: #1b1b1b;
   border: solid 5px #1b1b1b;
