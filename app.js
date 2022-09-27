@@ -4,8 +4,7 @@ const $startStopButton = document.getElementById("startStopButton");
 const $lapResetButton = document.getElementById("lapResetButton");
 let timerId;
 
-let isRunning = false;
-let isOnZero = true;
+let state = "onZero";
 
 const $lapTable = document.getElementById("lapTable");
 let lapTableRow, lapTableLapNumberCell, lapTableTimeCell;
@@ -25,6 +24,13 @@ function formatLapValues() {
   lapSeconds = lapSeconds.toString().padStart(2, "0");
   lapHundredths = lapHundredths.toString().padStart(2, "0");
 }
+
+function formatTimeValues(testTimer) {
+  testTimer.minutes = testTimer.minutes.toString().padStart(2, "0");
+  testTimer.seconds = testTimer.seconds.toString().padStart(2, "0");
+  testTimer.hundredths = testTimer.hundredths.toString().padStart(2, "0");
+}
+
 function updateLapTimer() {
   currentLap = `${lapMinutes}:${lapSeconds}.${lapHundredths}`;
   lapTableTimeCell.innerText = `${currentLap}`;
@@ -38,6 +44,7 @@ function updateCurrentLapValues() {
   formatLapValues();
   updateLapTimer();
 }
+
 function updateTimeValues() {
   milliseconds += 10;
   minutes = Math.floor(milliseconds / 60000);
@@ -62,7 +69,7 @@ function deleteEmptyLapEntry() {
   document.getElementById(`emptyRow${lapNumber}`).remove();
 }
 
-function createEmptyLapRow() {
+function createEmptyLapEntry() {
   lapNumber = 6;
   while (lapNumber > 0) {
     lapTableRow = $lapTable.insertRow(0);
@@ -76,12 +83,12 @@ function initialize() {
   $lapResetButton.classList.replace("lap-reset-button", "unabled-lap-button");
   $startStopButton.innerText = "Start";
   $lapResetButton.innerText = "Lap";
-  isOnZero = true;
+  state = "onZero";
   minutes = seconds = milliseconds = hundredths = 0;
   lapMinutes = lapSeconds = lapMilliseconds = lapHundredths = 0;
   formatAndPrintTimeValues();
   $lapTable.innerHTML = "";
-  createEmptyLapRow();
+  createEmptyLapEntry();
   lapNumber = 1;
 }
 
@@ -91,22 +98,14 @@ function updateBestWorstLap() {
     bestLapMilliseconds = worstLapMilliseconds = lapMilliseconds;
   } else {
     if (lapMilliseconds < bestLapMilliseconds) {
-      if (lapNumber > 2) {
-        document.getElementById(`lap-${bestLapPosition}`).classList.remove("best-lap");
-        document.getElementById(`lap-${lapNumber}`).classList.add("best-lap");
-      }
+      if (lapNumber > 2) document.getElementById(`lap-${bestLapPosition}`).classList.remove("best-lap");
       bestLapPosition = lapNumber;
       bestLapMilliseconds = lapMilliseconds;
     } else if (lapMilliseconds > worstLapMilliseconds) {
-      if (lapNumber > 2) {
-        document.getElementById(`lap-${worstLapPosition}`).classList.remove("worst-lap");
-        document.getElementById(`lap-${lapNumber}`).classList.add("worst-lap");
-      }
+      if (lapNumber > 2) document.getElementById(`lap-${worstLapPosition}`).classList.remove("worst-lap");
       worstLapPosition = lapNumber;
       worstLapMilliseconds = lapMilliseconds;
     }
-  }
-  if (lapNumber === 2) {
     document.getElementById(`lap-${bestLapPosition}`).classList.add("best-lap");
     document.getElementById(`lap-${worstLapPosition}`).classList.add("worst-lap");
   }
@@ -114,36 +113,32 @@ function updateBestWorstLap() {
 
 // ----------------------- //
 $startStopButton.onclick = () => {
-  if (!isRunning) {
-    if (isOnZero) {
+  if (state === "onZero" || state === "paused") {
+    if (state === "onZero") {
       $lapResetButton.classList.replace("unabled-lap-button", "lap-reset-button");
       isOnZero = false;
       registerNewLap();
-    } else {
-      $lapResetButton.innerText = "Lap";
-    }
+    } else if (state === "paused") $lapResetButton.innerText = "Lap";
     $startStopButton.classList.replace("start-button", "stop-button");
     $startStopButton.innerText = "Stop";
     startingTimeCurrentLap = milliseconds;
     timerId = setInterval(updateTimeValues, 10);
-  } else {
+    state = "running";
+  } else if (state === "running") {
     $startStopButton.classList.replace("stop-button", "start-button");
     $startStopButton.innerText = "Start";
     $lapResetButton.innerText = "Reset";
     clearInterval(timerId);
+    state = "paused";
   }
-  isRunning = !isRunning;
 };
 
 $lapResetButton.onclick = () => {
-  if (!isOnZero) {
-    if (!isRunning) {
-      initialize();
-    } else {
-      updateBestWorstLap();
-      ++lapNumber;
-      lapMilliseconds = 0;
-      registerNewLap();
-    }
+  if (state === "paused") initialize();
+  if (state === "running") {
+    updateBestWorstLap();
+    ++lapNumber;
+    lapMilliseconds = 0;
+    registerNewLap();
   }
 };
