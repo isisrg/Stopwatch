@@ -6,20 +6,21 @@
 
 /* ----------------------- */
 
-body {
-  background-color: #030003;
+.scrollable-element {
+  scrollbar-color: #7f7f7f;
+  scrollbar-track-color: rgba(1, 1, 1, 0);
 }
 
 /* ----------------------- */
 
 button {
-  height: 200px;
-  width: 200px;
-  font-size: 50px;
+  height: 80px;
+  width: 80px;
+  font-size: 20px;
   font-weight: 250;
   border-radius: 50%;
-  box-shadow: inset 0 0 0 5px #030003;
-  margin: 40px;
+  box-shadow: inset 0 0 0 2px #030003;
+  margin: 0;
 }
 
 table {
@@ -29,9 +30,9 @@ table {
 }
 
 tr {
-  height: 110px;
-  border-top: solid 3px #151516;
-  border-bottom: solid 3px #151516;
+  height: 45px;
+  border-top: solid 2px #151516;
+  border-bottom: solid 2px #151516;
   justify-items: center;
 }
 
@@ -41,29 +42,35 @@ td:nth-child(2) {
 
 /* ----------------------- */
 
-#timerAndButtonsContainer {
-  width: 95%;
-  height: 55%;
-  margin: 0 auto;
+#appContainer {
+  width: 390;
+  height: 844;
+  background-color: #030003;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+}
+
+#timerAndButtonsContainer {
+  height: 55%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
   align-items: center;
 }
 
 #buttonsContainer {
-  width: 95%;
+  width: 90%;
+  margin-top: 20%;
   display: flex;
-  align-self: flex-end;
   justify-content: space-between;
-  position: absolute;
 }
 
 #lapContainer {
   overflow-x: auto;
   height: 35%;
-  width: 95%;
+  width: 93%;
   margin: 0 auto;
-  border-top: solid 3px #151516;
+  /* border-top: solid 3px #151516; */
 }
 
 #bottomMenu {
@@ -76,14 +83,13 @@ td:nth-child(2) {
 #timer {
   color: #fffdff;
   font-weight: 100;
-  font-size: 200px;
-  align-self: center;
-  position: relative;
+  font-size: 80px;
+  margin-top: 50%;
 }
 
 .lap-entry {
   color: #fffdff;
-  font-size: 50px;
+  font-size: 16px;
 }
 
 .best-lap {
@@ -97,51 +103,51 @@ td:nth-child(2) {
 /* ----------------------- */
 .start-button {
   background-color: #082a11;
-  border: solid 5px #082a11;
+  border: solid 2px #082a11;
   color: #2abf50;
 }
 
 .start-button:hover {
   background-color: #041609;
-  border: solid 5px #041609;
+  border: solid 2px #041609;
   color: #2abf50;
 }
 
 .stop-button {
   background-color: #320e0b;
-  border: solid 5px #320e0b;
+  border: solid 2px #320e0b;
   color: #e93f35;
 }
 
 .stop-button:hover {
   background-color: #1b0705;
-  border: solid 5px #1b0705;
+  border: solid 2px #1b0705;
   color: #e93f35;
 }
 
 /* Used on the Lap button when is not beeing pressed when the Start button has not been pressed yet*/
 .unabled-lap-button {
   background-color: #1c1c1d;
-  border: solid 5px #1c1c1d;
+  border: solid 2px #1c1c1d;
   color: #77777e;
 }
 
 /* hover or active */
 .unabled-lap-button:hover {
   background-color: #0f0f0f;
-  border: solid 5px #0f0f0f;
+  border: solid 2px #0f0f0f;
   color: #77777e;
 }
 
 .lap-reset-button {
   background-color: #333;
-  border: solid 5px #333;
+  border: solid 2px #333;
   color: #fff;
 }
 
 /* hover or active */
 .lap-reset-button:hover {
   background-color: #1b1b1b;
-  border: solid 5px #1b1b1b;
+  border: solid 2px #1b1b1b;
   color: #fff;
 }

@@ -49,7 +49,7 @@ function updateTimeValues() {
 
 function registerNewLap() {
   formatLapValues();
-  if (lapNumber <= 6) deleteEmptyRow();
+  if (lapNumber <= 6) deleteEmptyLapEntry();
   lapTableRow = $lapTable.insertRow(0);
   lapTableRow.id = `lap-${lapNumber}`;
   lapTableLapNumberCell = lapTableRow.insertCell(0);
@@ -58,17 +58,57 @@ function registerNewLap() {
   updateLapTimer();
 }
 
-function deleteEmptyRow() {
+function deleteEmptyLapEntry() {
   document.getElementById(`emptyRow${lapNumber}`).remove();
 }
 
-function createEmptyRows() {
+function createEmptyLapRow() {
   lapNumber = 6;
   while (lapNumber > 0) {
     lapTableRow = $lapTable.insertRow(0);
     lapTableRow.id = `emptyRow${lapNumber}`;
     lapTableRow.insertCell(0);
     --lapNumber;
+  }
+}
+
+function initialize() {
+  $lapResetButton.classList.replace("lap-reset-button", "unabled-lap-button");
+  $startStopButton.innerText = "Start";
+  $lapResetButton.innerText = "Lap";
+  isOnZero = true;
+  minutes = seconds = milliseconds = hundredths = 0;
+  lapMinutes = lapSeconds = lapMilliseconds = lapHundredths = 0;
+  formatAndPrintTimeValues();
+  $lapTable.innerHTML = "";
+  createEmptyLapRow();
+  lapNumber = 1;
+}
+
+function updateBestWorstLap() {
+  if (lapNumber === 1) {
+    bestLapPosition = worstLapPosition = 1;
+    bestLapMilliseconds = worstLapMilliseconds = lapMilliseconds;
+  } else {
+    if (lapMilliseconds < bestLapMilliseconds) {
+      if (lapNumber > 2) {
+        document.getElementById(`lap-${bestLapPosition}`).classList.remove("best-lap");
+        document.getElementById(`lap-${lapNumber}`).classList.add("best-lap");
+      }
+      bestLapPosition = lapNumber;
+      bestLapMilliseconds = lapMilliseconds;
+    } else if (lapMilliseconds > worstLapMilliseconds) {
+      if (lapNumber > 2) {
+        document.getElementById(`lap-${worstLapPosition}`).classList.remove("worst-lap");
+        document.getElementById(`lap-${lapNumber}`).classList.add("worst-lap");
+      }
+      worstLapPosition = lapNumber;
+      worstLapMilliseconds = lapMilliseconds;
+    }
+  }
+  if (lapNumber === 2) {
+    document.getElementById(`lap-${bestLapPosition}`).classList.add("best-lap");
+    document.getElementById(`lap-${worstLapPosition}`).classList.add("worst-lap");
   }
 }
 
@@ -98,41 +138,9 @@ $startStopButton.onclick = () => {
 $lapResetButton.onclick = () => {
   if (!isOnZero) {
     if (!isRunning) {
-      $lapResetButton.classList.replace("lap-reset-button", "unabled-lap-button");
-      $startStopButton.innerText = "Start";
-      $lapResetButton.innerText = "Lap";
-      isOnZero = true;
-      minutes = seconds = milliseconds = hundredths = 0;
-      lapMinutes = lapSeconds = lapMilliseconds = lapHundredths = 0;
-      formatAndPrintTimeValues();
-      $lapTable.innerHTML = "";
-      createEmptyRows();
-      lapNumber = 1;
+      initialize();
     } else {
-      if (lapNumber === 1) {
-        bestLapPosition = worstLapPosition = 1;
-        bestLapMilliseconds = worstLapMilliseconds = lapMilliseconds;
-      } else {
-        if (lapMilliseconds < bestLapMilliseconds) {
-          if (lapNumber > 2) {
-            document.getElementById(`lap-${bestLapPosition}`).classList.remove("best-lap");
-            document.getElementById(`lap-${lapNumber}`).classList.add("best-lap");
-          }
-          bestLapPosition = lapNumber;
-          bestLapMilliseconds = lapMilliseconds;
-        } else if (lapMilliseconds > worstLapMilliseconds) {
-          if (lapNumber > 2) {
-            document.getElementById(`lap-${worstLapPosition}`).classList.remove("worst-lap");
-            document.getElementById(`lap-${lapNumber}`).classList.add("worst-lap");
-          }
-          worstLapPosition = lapNumber;
-          worstLapMilliseconds = lapMilliseconds;
-        }
-      }
-      if (lapNumber === 2) {
-        document.getElementById(`lap-${bestLapPosition}`).classList.add("best-lap");
-        document.getElementById(`lap-${worstLapPosition}`).classList.add("worst-lap");
-      }
+      updateBestWorstLap();
       ++lapNumber;
       lapMilliseconds = 0;
       registerNewLap();
