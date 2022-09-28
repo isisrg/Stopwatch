@@ -44,15 +44,6 @@ function updateLapTimer() {
   lapTableTimeCell.innerText = `${currentLap}`;
 }
 
-function updateCurrentLapValues() {
-  lapMilliseconds += 10;
-  lapMinutes = Math.floor(lapMilliseconds / 60000);
-  lapSeconds = Math.floor(lapMilliseconds / 1000) % 60;
-  lapHundredths = Math.floor((lapMilliseconds % 1000) / 10);
-  formatLapValues();
-  updateLapTimer();
-}
-
 function updateTimeValues(timer) {
   timer.milliseconds += 10;
   timer.minutes = Math.floor(timer.milliseconds / 60000);
