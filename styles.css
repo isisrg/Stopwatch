@@ -112,6 +112,7 @@ td:nth-child(2) {
 }
 
 /* ----------------------- */
+
 .start-button {
   background-color: #082a11;
   border: solid 2px #082a11;
@@ -143,7 +144,6 @@ td:nth-child(2) {
   color: #77777e;
 }
 
-/* hover or active */
 .unabled-lap-button:hover {
   background-color: #0f0f0f;
   border: solid 2px #0f0f0f;
@@ -156,7 +156,6 @@ td:nth-child(2) {
   color: #fff;
 }
 
-/* hover or active */
 .lap-reset-button:hover {
   background-color: #1b1b1b;
   border: solid 2px #1b1b1b;
