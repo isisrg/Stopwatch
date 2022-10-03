@@ -17,6 +17,7 @@ let mainTimer = {
   seconds: 0,
   hundredths: 0,
   milliseconds: 0,
+  startingTime: 0,
 }
 
 let lapTimer = {
@@ -24,6 +25,7 @@ let lapTimer = {
   seconds: 0,
   hundredths: 0,
   milliseconds: 0,
+  startingTime: 0,
 }
 
 const bestWorstLapInfo = {
@@ -36,7 +38,7 @@ const bestWorstLapInfo = {
 // ----------------------- //
 
 function updateTimeValues(timer) {
-  timer.milliseconds += 10
+  timer.milliseconds = Date.now() - timer.startingTime
   timer.minutes = Math.floor(timer.milliseconds / 60000)
   timer.seconds = Math.floor(timer.milliseconds / 1000) % 60
   timer.hundredths = Math.floor((timer.milliseconds % 1000) / 10)
@@ -60,6 +62,7 @@ function updateAllTimeValues() {
   updateTimeValues(lapTimer)
   formatTimeValues(lapTimer)
   updateLapTimer()
+  timerId = requestAnimationFrame(updateAllTimeValues)
 }
 
 function registerNewLap() {
@@ -101,6 +104,11 @@ function updateState() {
   }
 }
 
+function initializeTimers() {
+  mainTimer.startingTime = Date.now()
+  lapTimer.startingTime = Date.now()
+}
+
 function updateButtonsStyles() {
   switch (state) {
     case "onZero":
@@ -128,8 +136,8 @@ function updateButtonsStyles() {
 function initialize() {
   state = "toReset"
   updateButtonsStyles()
-  mainTimer = { minutes: 0, seconds: 0, hundredths: 0, milliseconds: 0 }
-  lapTimer = { minutes: 0, seconds: 0, hundredths: 0, milliseconds: 0 }
+  mainTimer = { minutes: 0, seconds: 0, hundredths: 0, milliseconds: 0, startingTime: 0 }
+  lapTimer = { minutes: 0, seconds: 0, hundredths: 0, milliseconds: 0, startingTime: 0 }
   formatTimeValues(mainTimer)
   $timer.innerText = `${mainTimer.minutes}:${mainTimer.seconds}.${mainTimer.hundredths}`
   $lapTable.innerHTML = ""
@@ -207,16 +215,17 @@ $startStopButton.onclick = () => {
       updateButtonsStyles()
       registerNewLap()
       updateState()
-      timerId = setInterval(updateAllTimeValues, 10)
+      initializeTimers()
+      timerId = requestAnimationFrame(updateAllTimeValues)
       break
     case "paused":
       updateButtonsStyles()
       updateState()
-      timerId = setInterval(updateAllTimeValues, 10)
+      timerId = requestAnimationFrame(updateAllTimeValues)
       break
     case "running":
       updateButtonsStyles()
-      clearInterval(timerId)
+      cancelAnimationFrame(timerId)
       updateState()
   }
 }
@@ -229,7 +238,7 @@ $lapResetButton.onclick = () => {
     case "running":
       updateBestWorstLap()
       ++lapNumber
-      lapTimer.minutes = lapTimer.seconds = lapTimer.hundredths = lapTimer.milliseconds = 0
+      lapTimer = { minutes: 0, seconds: 0, hundredths: 0, milliseconds: 0, startingTime: Date.now() }
       registerNewLap()
   }
 }
