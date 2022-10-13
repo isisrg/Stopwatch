@@ -17,6 +17,7 @@ let mainTimer = {
   seconds: 0,
   hundredths: 0,
   milliseconds: 0,
+  timerMilliseconds: 0,
   startingTime: 0,
 }
 
@@ -25,6 +26,7 @@ let lapTimer = {
   seconds: 0,
   hundredths: 0,
   milliseconds: 0,
+  timerMilliseconds: 0,
   startingTime: 0,
 }
 
@@ -38,7 +40,9 @@ const bestWorstLapInfo = {
 // ----------------------- //
 
 function updateTimeValues(timer) {
-  timer.milliseconds = Date.now() - timer.startingTime
+  timer.timerMilliseconds = Date.now() - timer.startingTime
+  timer.startingTime = Date.now()
+  timer.milliseconds += timer.timerMilliseconds
   timer.minutes = Math.floor(timer.milliseconds / 60000)
   timer.seconds = Math.floor(timer.milliseconds / 1000) % 60
   timer.hundredths = Math.floor((timer.milliseconds % 1000) / 10)
@@ -136,8 +140,8 @@ function updateButtonsStyles() {
 function initialize() {
   state = "toReset"
   updateButtonsStyles()
-  mainTimer = { minutes: 0, seconds: 0, hundredths: 0, milliseconds: 0, startingTime: 0 }
-  lapTimer = { minutes: 0, seconds: 0, hundredths: 0, milliseconds: 0, startingTime: 0 }
+  mainTimer = { minutes: 0, seconds: 0, hundredths: 0, milliseconds: 0, timerMilliseconds: 0, startingTime: 0 }
+  lapTimer = { minutes: 0, seconds: 0, hundredths: 0, milliseconds: 0, timerMilliseconds: 0, startingTime: 0 }
   formatTimeValues(mainTimer)
   $timer.innerText = `${mainTimer.minutes}:${mainTimer.seconds}.${mainTimer.hundredths}`
   $lapTable.innerHTML = ""
@@ -221,12 +225,14 @@ $startStopButton.onclick = () => {
     case "paused":
       updateButtonsStyles()
       updateState()
+      initializeTimers()
       timerId = requestAnimationFrame(updateAllTimeValues)
       break
     case "running":
       updateButtonsStyles()
       cancelAnimationFrame(timerId)
       updateState()
+      initializeTimers()
   }
 }
 
@@ -238,7 +244,7 @@ $lapResetButton.onclick = () => {
     case "running":
       updateBestWorstLap()
       ++lapNumber
-      lapTimer = { minutes: 0, seconds: 0, hundredths: 0, milliseconds: 0, startingTime: Date.now() }
+      lapTimer = { minutes: 0, seconds: 0, hundredths: 0, milliseconds: 0, timerMilliseconds: 0, startingTime: Date.now() }
       registerNewLap()
   }
 }
